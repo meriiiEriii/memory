@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sign in — Memory Lane</title>
+  <meta name="description" content="Sign in or create a free Memory Lane account to restore your old photos.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='7' fill='%23c9a227'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="auth-page">
+
+  <main class="auth-main">
+    <div class="auth-card">
+      <a class="brand auth-brand" href="index.html">
+        <span class="brand-mark">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+        </span>
+        Memory Lane
+      </a>
+
+      <h1 id="auth-title">Welcome back</h1>
+      <p class="auth-sub" id="auth-sub">Sign in to open the Memory Lane studio.</p>
+
+      <form id="login-form" novalidate>
+        <label class="auth-label" for="auth-email">Email</label>
+        <input class="auth-input" type="email" id="auth-email" name="email" autocomplete="email" required placeholder="Enter your email address">
+
+        <label class="auth-label" for="auth-password">Password</label>
+        <input class="auth-input" type="password" id="auth-password" name="password" autocomplete="current-password" required minlength="6" placeholder="At least 6 characters">
+
+        <label class="auth-label hidden-row" id="confirm-row" for="auth-confirm">Confirm password</label>
+        <input class="auth-input hidden-row" type="password" id="auth-confirm" name="confirm" autocomplete="new-password" minlength="6" placeholder="Repeat your password">
+
+        <button class="btn btn-block" id="auth-submit" type="submit">Sign in</button>
+      </form>
+
+      <p class="auth-error" id="auth-error" hidden role="alert"></p>
+
+      <p class="auth-switch">
+        <span id="switch-text">New to Memory Lane?</span>
+        <a href="#" id="toggle-mode">Create a free account</a>
+      </p>
+
+      <a class="auth-back" href="index.html">&larr; Back to the homepage</a>
+    </div>
+  </main>
+
+  <script type="module" src="js/firebase-auth.js"></script>
+</body>
+</html>

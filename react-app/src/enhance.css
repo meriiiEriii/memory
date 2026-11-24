@@ -1,0 +1,178 @@
+/*
+ * enhance.css — Remini-style cloud AI enhancement page (React version).
+ * Scoped under .enhance-page so these rules only apply on that page and
+ * never leak into the rest of the single-page app.
+ */
+
+.enhance-page {
+  --ink: #3b2f23;
+  --paper: #f6efe2;
+  --card: #fffaf1;
+  --accent: #c9a227;
+  --accent-dark: #a3831c;
+  --danger: #b3372a;
+  --ok: #3d7a44;
+  --line: #e5d9c3;
+
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  background: var(--paper);
+  color: var(--ink);
+  min-height: 100vh;
+}
+
+.enhance-page header {
+  background: #2d241a;
+  color: #f4e9d4;
+  padding: 18px 28px;
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.enhance-page header h1 { font-size: 22px; margin: 0; letter-spacing: 0.5px; }
+.enhance-page header a { color: var(--accent); font-size: 14px; }
+
+/* Account area (email + logout), same look as the legacy page */
+.enhance-page .auth-area { display: inline-flex; align-items: center; gap: 10px; margin-left: auto; align-self: center; }
+.enhance-page .auth-user { font-size: 13px; color: #8a7a6e; }
+.enhance-page .auth-logout {
+  font-family: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  background: none;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  border-radius: 999px;
+  padding: 4px 12px;
+}
+.enhance-page .auth-logout:hover { background: var(--accent); color: #fff; }
+
+.enhance-page main { max-width: 1080px; margin: 0 auto; padding: 28px 20px 60px; }
+
+.enhance-page .card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 22px;
+  box-shadow: 0 6px 18px rgba(59, 47, 35, 0.08);
+}
+
+/* ---------- 1. Upload drop area (click or drag-and-drop) ---------- */
+.enhance-page .drop-zone {
+  border: 2px dashed var(--accent);
+  border-radius: 12px;
+  background: #fff;
+  padding: 26px 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+.enhance-page .drop-zone.dragging {
+  background: #fdf3da;
+  border-color: var(--accent-dark);
+}
+.enhance-page .drop-zone h2 { margin: 0 0 6px; font-size: 19px; }
+.enhance-page .drop-zone p { margin: 0; font-size: 14px; color: #7a6a52; }
+.enhance-page .drop-zone input[type="file"] {
+  margin-top: 12px;
+  width: 100%;
+  max-width: 340px;
+}
+
+/* ---------- Mode selector (radio cards) ---------- */
+.enhance-page .mode-group {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: 20px 0 6px;
+}
+.enhance-page .mode-card {
+  flex: 1 1 220px;
+  border: 2px solid var(--line);
+  border-radius: 12px;
+  background: #fff;
+  padding: 13px 15px;
+  cursor: pointer;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  transition: border-color 0.15s, background 0.15s;
+}
+.enhance-page .mode-card input { margin-top: 3px; accent-color: var(--accent-dark); }
+.enhance-page .mode-card b { display: block; font-size: 15px; }
+.enhance-page .mode-card span { display: block; font-size: 12.5px; color: #7a6a52; margin-top: 2px; }
+.enhance-page .mode-card.active {
+  border-color: var(--accent-dark);
+  background: #fdf3da;
+}
+
+/* ---------- Fidelity + submit ---------- */
+.enhance-page .fidelity-row { margin: 12px 0 4px; font-size: 14px; }
+.enhance-page .fidelity-row input[type="range"] { vertical-align: middle; width: 220px; }
+.enhance-page .hidden { display: none !important; }
+
+.enhance-page .actions-row { margin-top: 16px; display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+
+.enhance-page button.btn {
+  font-family: inherit;
+  font-size: 15px;
+  padding: 11px 22px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: #fff;
+  color: var(--ink);
+  cursor: pointer;
+}
+.enhance-page button.btn.primary {
+  background: var(--accent);
+  border-color: var(--accent-dark);
+  color: #241d10;
+  font-weight: bold;
+}
+.enhance-page button.btn.primary:disabled { opacity: 0.45; cursor: not-allowed; }
+.enhance-page button.btn.primary:not(:disabled):hover { background: var(--accent-dark); color: #fff; }
+
+/* ---------- Status line + spinner ---------- */
+.enhance-page .status-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 28px;
+  margin: 12px 0 16px;
+  font-size: 15px;
+}
+.enhance-page .status-row.error #status-text { color: var(--danger); }
+.enhance-page .status-row.ok #status-text { color: var(--ok); }
+.enhance-page .spinner {
+  width: 20px;
+  height: 20px;
+  border: 3px solid var(--line);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: mrl-spin 0.9s linear infinite;
+  flex: none;
+}
+@keyframes mrl-spin { to { transform: rotate(360deg); } }
+
+/* ---------- Before / After comparison ---------- */
+.enhance-page .compare { display: flex; gap: 18px; flex-wrap: wrap; }
+.enhance-page .compare figure {
+  flex: 1 1 320px;
+  margin: 0;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.enhance-page .compare figcaption {
+  background: #efe5d0;
+  font-size: 12px;
+  letter-spacing: 2px;
+  font-weight: bold;
+  padding: 7px 12px;
+  text-transform: uppercase;
+}
+.enhance-page .compare img { display: block; width: 100%; height: auto; }
+
+.enhance-page .privacy-note { font-size: 13px; color: #7a6a52; margin-top: 16px; }

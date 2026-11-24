@@ -1,0 +1,166 @@
+/*
+ * enhance.css — Remini-style cloud AI enhancement page.
+ * Same sepia "Memory Lane" theme as the rest of the site.
+ */
+
+:root {
+  --ink: #3b2f23;
+  --paper: #f6efe2;
+  --card: #fffaf1;
+  --accent: #c9a227;
+  --accent-dark: #a3831c;
+  --danger: #b3372a;
+  --ok: #3d7a44;
+  --line: #e5d9c3;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  background: var(--paper);
+  color: var(--ink);
+  min-height: 100vh;
+}
+
+header {
+  background: #2d241a;
+  color: #f4e9d4;
+  padding: 18px 28px;
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+header h1 { font-size: 22px; margin: 0; letter-spacing: 0.5px; }
+header a { color: var(--accent); font-size: 14px; }
+
+main { max-width: 1080px; margin: 0 auto; padding: 28px 20px 60px; }
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 22px;
+  box-shadow: 0 6px 18px rgba(59, 47, 35, 0.08);
+}
+
+/* ---------- 1. Upload drop area (click or drag-and-drop) ---------- */
+.drop-zone {
+  border: 2px dashed var(--accent);
+  border-radius: 12px;
+  background: #fff;
+  padding: 26px 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+.drop-zone.dragging {
+  background: #fdf3da;
+  border-color: var(--accent-dark);
+}
+.drop-zone h2 { margin: 0 0 6px; font-size: 19px; }
+.drop-zone p { margin: 0; font-size: 14px; color: #7a6a52; }
+.drop-zone input[type="file"] {
+  margin-top: 12px;
+  width: 100%;
+  max-width: 340px;
+}
+
+/* ---------- Mode selector (radio cards) ---------- */
+.mode-group {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: 20px 0 6px;
+}
+.mode-card {
+  flex: 1 1 220px;
+  border: 2px solid var(--line);
+  border-radius: 12px;
+  background: #fff;
+  padding: 13px 15px;
+  cursor: pointer;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  transition: border-color 0.15s, background 0.15s;
+}
+.mode-card input { margin-top: 3px; accent-color: var(--accent-dark); }
+.mode-card b { display: block; font-size: 15px; }
+.mode-card span { display: block; font-size: 12.5px; color: #7a6a52; margin-top: 2px; }
+.mode-card.active {
+  border-color: var(--accent-dark);
+  background: #fdf3da;
+}
+
+/* ---------- Fidelity + submit ---------- */
+.fidelity-row { margin: 12px 0 4px; font-size: 14px; }
+.fidelity-row input[type="range"] { vertical-align: middle; width: 220px; }
+.hidden { display: none !important; }
+
+.actions-row { margin-top: 16px; display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+
+button.btn {
+  font-family: inherit;
+  font-size: 15px;
+  padding: 11px 22px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: #fff;
+  color: var(--ink);
+  cursor: pointer;
+}
+button.btn.primary {
+  background: var(--accent);
+  border-color: var(--accent-dark);
+  color: #241d10;
+  font-weight: bold;
+}
+button.btn.primary:disabled { opacity: 0.45; cursor: not-allowed; }
+button.btn.primary:not(:disabled):hover { background: var(--accent-dark); color: #fff; }
+
+/* ---------- Status line + spinner ---------- */
+.status-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 28px;
+  margin: 12px 0 16px;
+  font-size: 15px;
+}
+.status-row.error #status-text { color: var(--danger); }
+.status-row.ok #status-text { color: var(--ok); }
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 3px solid var(--line);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+  flex: none;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ---------- Before / After comparison ---------- */
+.compare { display: flex; gap: 18px; flex-wrap: wrap; }
+.compare figure {
+  flex: 1 1 320px;
+  margin: 0;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.compare figcaption {
+  background: #efe5d0;
+  font-size: 12px;
+  letter-spacing: 2px;
+  font-weight: bold;
+  padding: 7px 12px;
+  text-transform: uppercase;
+}
+.compare img { display: block; width: 100%; height: auto; }
+
+.privacy-note { font-size: 13px; color: #7a6a52; margin-top: 16px; }

@@ -1,0 +1,137 @@
+/*
+ * cloud-restore.css — React version of the legacy cloud-restore.html
+ * inline styles. Scoped under .cloudrestore-page so the rules only apply
+ * on that page and never leak into the rest of the single-page app.
+ */
+
+.cloudrestore-page {
+  --ink: #3b2f23;
+  --paper: #f6efe2;
+  --card: #fffaf1;
+  --accent: #c9a227;
+  --accent-dark: #a3831c;
+  --danger: #b3372a;
+  --ok: #3d7a44;
+  --line: #e5d9c3;
+
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  background: var(--paper);
+  color: var(--ink);
+  min-height: 100vh;
+}
+
+.cloudrestore-page header {
+  background: #2d241a;
+  color: #f4e9d4;
+  padding: 18px 28px;
+}
+.cloudrestore-page header h1 { font-size: 22px; margin: 0; letter-spacing: 0.5px; }
+.cloudrestore-page header a { color: var(--accent); font-size: 14px; margin-right: 12px; }
+
+/* Account area (email + logout), same look as the legacy page */
+.cloudrestore-page .auth-area { display: inline-flex; align-items: center; gap: 10px; margin-left: auto; align-self: center; }
+.cloudrestore-page .auth-user { font-size: 13px; color: #cbb994; }
+.cloudrestore-page .auth-logout {
+  font-family: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  background: none;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  border-radius: 999px;
+  padding: 4px 12px;
+}
+.cloudrestore-page .auth-logout:hover { background: var(--accent); color: #241d10; }
+
+.cloudrestore-page main { max-width: 1080px; margin: 0 auto; padding: 28px 20px 60px; }
+
+.cloudrestore-page .card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 22px;
+  box-shadow: 0 6px 18px rgba(59, 47, 35, 0.08);
+}
+
+/* ---------- Upload form ---------- */
+.cloudrestore-page .upload-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  align-items: center;
+  margin-bottom: 14px;
+}
+.cloudrestore-page .file-label {
+  flex: 1 1 260px;
+  border: 2px dashed var(--accent);
+  border-radius: 10px;
+  padding: 14px 16px;
+  cursor: pointer;
+  font-size: 15px;
+  background: #fff;
+}
+.cloudrestore-page .file-label input { display: block; margin-top: 6px; width: 100%; }
+.cloudrestore-page select, .cloudrestore-page button.btn {
+  font-family: inherit;
+  font-size: 15px;
+  padding: 11px 20px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: #fff;
+  color: var(--ink);
+  cursor: pointer;
+}
+.cloudrestore-page button.btn.primary {
+  background: var(--accent);
+  border-color: var(--accent-dark);
+  color: #241d10;
+  font-weight: bold;
+}
+.cloudrestore-page button.btn.primary:disabled { opacity: 0.45; cursor: not-allowed; }
+.cloudrestore-page button.btn.primary:not(:disabled):hover { background: var(--accent-dark); color: #fff; }
+
+/* ---------- Status line + spinner ---------- */
+.cloudrestore-page .status-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 28px;
+  margin: 10px 0 18px;
+  font-size: 15px;
+}
+.cloudrestore-page .status-row.error #status-text { color: var(--danger); }
+.cloudrestore-page .status-row.ok #status-text { color: var(--ok); }
+.cloudrestore-page .spinner {
+  width: 20px;
+  height: 20px;
+  border: 3px solid var(--line);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: mrl-spin 0.9s linear infinite;
+  flex: none;
+}
+
+/* ---------- Before / After panels ---------- */
+.cloudrestore-page .compare { display: flex; gap: 18px; flex-wrap: wrap; }
+.cloudrestore-page .compare figure {
+  flex: 1 1 320px;
+  margin: 0;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.cloudrestore-page .compare figcaption {
+  background: #efe5d0;
+  font-size: 12px;
+  letter-spacing: 2px;
+  font-weight: bold;
+  padding: 7px 12px;
+  text-transform: uppercase;
+}
+.cloudrestore-page .compare img { display: block; width: 100%; height: auto; }
+.cloudrestore-page .hidden { display: none !important; }
+
+.cloudrestore-page .privacy-note { font-size: 13px; color: #7a6a52; margin-top: 16px; }
+.cloudrestore-page .actions { margin-top: 16px; display: flex; gap: 12px; flex-wrap: wrap; }

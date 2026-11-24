@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cloud AI Restore — Memory Lane</title>
+    <meta name="description" content="Restore blurry or damaged photos with CodeFormer / GFPGAN running in the cloud via Replicate.">
+    <script>
+      document.documentElement.classList.add("auth-wait");
+      setTimeout(function () { document.documentElement.classList.remove("auth-wait"); }, 8000);
+    </script>
+    <style>
+    /* ---------- Page theme (matches the Memory Lane sepia look) ---------- */
+    :root {
+      --ink: #3b2f23;
+      --paper: #f6efe2;
+      --card: #fffaf1;
+      --accent: #c9a227;
+      --accent-dark: #a3831c;
+      --danger: #b3372a;
+      --ok: #3d7a44;
+      --line: #e5d9c3;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      background: var(--paper);
+      color: var(--ink);
+      min-height: 100vh;
+    }
+    header {
+      background: #2d241a;
+      color: #f4e9d4;
+      padding: 18px 28px;
+      display: flex;
+      align-items: baseline;
+      gap: 14px;
+    }
+    header h1 { font-size: 22px; margin: 0; letter-spacing: 0.5px; }
+    header a { color: var(--accent); font-size: 14px; }
+    main { max-width: 1080px; margin: 0 auto; padding: 28px 20px 60px; }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 22px;
+      box-shadow: 0 6px 18px rgba(59, 47, 35, 0.08);
+    }
+
+    /* ---------- Upload form ---------- */
+    .upload-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+    .file-label {
+      flex: 1 1 260px;
+      border: 2px dashed var(--accent);
+      border-radius: 10px;
+      padding: 14px 16px;
+      cursor: pointer;
+      font-size: 15px;
+      background: #fff;
+    }
+    .file-label input { display: block; margin-top: 6px; width: 100%; }
+    select, button.btn {
+      font-family: inherit;
+      font-size: 15px;
+      padding: 11px 20px;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--ink);
+      cursor: pointer;
+    }
+    button.btn.primary {
+      background: var(--accent);
+      border-color: var(--accent-dark);
+      color: #241d10;
+      font-weight: bold;
+    }
+    button.btn.primary:disabled { opacity: 0.45; cursor: not-allowed; }
+    button.btn.primary:not(:disabled):hover { background: var(--accent-dark); color: #fff; }
+
+    /* ---------- Status line + spinner ---------- */
+    .status-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 28px;
+      margin: 10px 0 18px;
+      font-size: 15px;
+    }
+    .status-row.error #status-text { color: var(--danger); }
+    .status-row.ok #status-text { color: var(--ok); }
+    .spinner {
+      width: 20px;
+      height: 20px;
+      border: 3px solid var(--line);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.9s linear infinite;
+      flex: none;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ---------- Before / After panels ---------- */
+    .compare { display: flex; gap: 18px; flex-wrap: wrap; }
+    .compare figure {
+      flex: 1 1 320px;
+      margin: 0;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .compare figcaption {
+      background: #efe5d0;
+      font-size: 12px;
+      letter-spacing: 2px;
+      font-weight: bold;
+      padding: 7px 12px;
+      text-transform: uppercase;
+    }
+    .compare img { display: block; width: 100%; height: auto; }
+    .hidden { display: none !important; }
+
+    .privacy-note { font-size: 13px; color: #7a6a52; margin-top: 16px; }
+    .actions { margin-top: 16px; display: flex; gap: 12px; flex-wrap: wrap; }
+
+    /* ---------- Auth account area ---------- */
+    html.auth-wait body { visibility: hidden; }
+    .auth-area { display: inline-flex; align-items: center; gap: 10px; margin-left: auto; align-self: center; }
+    .auth-user { font-size: 13px; color: #cbb994; }
+    .auth-logout { font: inherit; font-size: 13px; cursor: pointer; background: none; border: 1px solid var(--accent); color: var(--accent); border-radius: 999px; padding: 4px 12px; }
+    .auth-logout:hover { background: var(--accent); color: #241d10; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Memory Lane — Cloud AI Restore</h1>
+  <a href="index.html">Back to the offline editor</a>
+  <span class="auth-area" id="auth-area">
+    <span class="auth-user" id="auth-user-email"></span>
+    <button class="auth-logout" id="btn-logout" type="button">Log out</button>
+  </span>
+</header>
+
+<main>
+  <!-- ============ 1. UPLOAD FORM ============ -->
+  <section class="card">
+    <div class="upload-row">
+      <label class="file-label">
+        Choose a photo to restore
+        <!-- The file picker itself. We never send the File object anywhere —
+             it is converted to a base64 data URI in JavaScript first. -->
+        <input type="file" id="file-input" accept="image/*">
+      </label>
+
+      <select id="model-select" aria-label="AI model">
+        <option value="codeformer" selected>CodeFormer — faces + background</option>
+        <option value="gfpgan">GFPGAN — face specialist</option>
+      </select>
+
+      <!-- CodeFormer "fidelity": 0 = max beautification, 1 = stay closest
+           to the original face. 0.7 is a good default for old family photos. -->
+      <label style="font-size:14px">
+        Fidelity
+        <input type="range" id="fidelity" min="0" max="100" value="70" aria-label="CodeFormer fidelity">
+        <span id="fidelity-value">0.70</span>
+      </label>
+
+      <!-- 2. The submit button — disabled until a file is chosen. -->
+      <button class="btn primary" id="btn-restore" disabled>Restore with AI</button>
+    </div>
+
+    <!-- 4. Loading spinner + status text (shown while the AI works) -->
+    <div class="status-row" id="status-row">
+      <span class="spinner hidden" id="spinner"></span>
+      <span id="status-text">Pick a photo to begin.</span>
+    </div>
+
+    <!-- ============ 5. BEFORE / AFTER RESULT ============ -->
+    <div class="compare">
+      <figure>
+        <figcaption>Before — your upload</figcaption>
+        <img id="before-img" alt="Original photo" class="hidden">
+      </figure>
+      <figure id="after-panel" class="hidden">
+        <figcaption>After — AI restored</figcaption>
+        <img id="after-img" alt="Restored photo">
+      </figure>
+    </div>
+
+    <div class="actions">
+      <button class="btn" id="btn-download" disabled hidden>Download restored photo</button>
+    </div>
+
+    <p class="privacy-note">
+      Note: this page sends your photo to Replicate's cloud (CodeFormer / GFPGAN models),
+      so unlike the offline editor the photo leaves this device. The API token lives only
+      in <code>server.js</code> on your computer — never in this page.
+    </p>
+  </section>
+</main>
+
+<script src="js/cloud-restore.js"></script>
+<script type="module" src="js/firebase-auth.js"></script>
+</body>
+</html>

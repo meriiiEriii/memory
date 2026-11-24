@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI Enhance — Memory Lane</title>
+  <meta name="description" content="Unblur, restore faces and colorize old photos with cloud AI (CodeFormer + DDColor via Replicate).">
+  <script>
+    document.documentElement.classList.add("auth-wait");
+    setTimeout(function () { document.documentElement.classList.remove("auth-wait"); }, 8000);
+  </script>
+  <style>
+    html.auth-wait body { visibility: hidden; }
+    .auth-area { display: inline-flex; align-items: center; gap: 10px; margin-left: auto; align-self: center; }
+    .auth-user { font-size: 13px; color: #8a7a6e; }
+    .auth-logout { font: inherit; font-size: 13px; cursor: pointer; background: none; border: 1px solid #c9a227; color: #a98418; border-radius: 999px; padding: 4px 12px; }
+    .auth-logout:hover { background: #c9a227; color: #fff; }
+  </style>
+  <link rel="stylesheet" href="css/enhance.css">
+</head>
+<body>
+
+<header>
+  <h1>Memory Lane — AI Enhance</h1>
+  <a href="index.html">Back to home</a>
+  <a href="editor.html">Offline editor</a>
+  <span class="auth-area" id="auth-area">
+    <span class="auth-user" id="auth-user-email"></span>
+    <button class="auth-logout" id="btn-logout" type="button">Log out</button>
+  </span>
+</header>
+
+<main>
+  <section class="card">
+
+    <!-- ============ 1a. UPLOAD DROP AREA ============
+         Click to browse OR drag a photo anywhere onto this box. -->
+    <div class="drop-zone" id="drop-zone">
+      <h2>Drop an old photo here</h2>
+      <p>…or click to browse. Blurry portraits, faded black & white prints — AI rebuilds the detail.</p>
+      <input type="file" id="file-input" accept="image/*">
+    </div>
+
+    <!-- ============ 1b. MODE SELECTOR (radio cards) ============ -->
+    <div class="mode-group" role="radiogroup" aria-label="Enhancement mode">
+      <label class="mode-card active">
+        <input type="radio" name="enhance-mode" value="face" checked>
+        <span>
+          <b>Unblur & Restore Face</b>
+          <span>CodeFormer rebuilds eyes, skin and soft focus.</span>
+        </span>
+      </label>
+      <label class="mode-card">
+        <input type="radio" name="enhance-mode" value="color">
+        <span>
+          <b>Colorize Old B&W Photo</b>
+          <span>DDColor paints plausible colour onto monochrome prints.</span>
+        </span>
+      </label>
+      <label class="mode-card">
+        <input type="radio" name="enhance-mode" value="both">
+        <span>
+          <b>Unblur + Colorize Both</b>
+          <span>Restores the face first, then colorizes the result.</span>
+        </span>
+      </label>
+    </div>
+
+    <!-- Fidelity slider (CodeFormer only: 0 = max beautify, 1 = stay faithful) -->
+    <div class="fidelity-row" id="fidelity-row">
+      <label>Fidelity
+        <input type="range" id="fidelity" min="0" max="100" value="70" aria-label="CodeFormer fidelity">
+        <span id="fidelity-value">0.70</span>
+      </label>
+    </div>
+
+    <!-- ============ 1c. SUBMIT ============ -->
+    <div class="actions-row">
+      <button class="btn primary" id="btn-enhance" disabled>Enhance Photo</button>
+      <button class="btn" id="btn-download" disabled hidden>Download enhanced photo</button>
+    </div>
+
+    <!-- ============ 1d. SPINNER + STATUS ============ -->
+    <div class="status-row" id="status-row">
+      <span class="spinner hidden" id="spinner"></span>
+      <span id="status-text">Pick a photo to begin.</span>
+    </div>
+
+    <!-- ============ 1e. BEFORE / AFTER ============ -->
+    <div class="compare">
+      <figure>
+        <figcaption>Before — your upload</figcaption>
+        <img id="before-img" alt="Original photo" class="hidden">
+      </figure>
+      <figure id="after-panel" class="hidden">
+        <figcaption>After — AI enhanced</figcaption>
+        <img id="after-img" alt="Enhanced photo">
+      </figure>
+    </div>
+
+    <p class="privacy-note">
+      This page sends your photo to Replicate's cloud AI (CodeFormer / DDColor) for processing,
+      so unlike the offline editor the photo leaves this device. When used through
+      <code>server.js</code>, the API token stays on your computer.
+    </p>
+  </section>
+</main>
+
+<script src="js/enhance.js"></script>
+<script type="module" src="js/firebase-auth.js"></script>
+</body>
+</html>
