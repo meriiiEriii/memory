@@ -1606,7 +1606,10 @@ window.MRL.initEditor = function () {
   }
 
   function runDemoSequence() {
-    const hash = location.hash;
+    // The app routes with the URL hash, so the demo flag is read from the whole
+    // URL (e.g. /#/editor#demo-blur) rather than from location.hash alone.
+    const m = location.href.match(/#(demo-[a-z]+)/);
+    const hash = m ? "#" + m[1] : "";
     if (hash !== "#demo-enhance" && hash !== "#demo-select" && hash !== "#demo-bw" && hash !== "#demo-blur") return;
     setTimeout(function () {
       if (hash === "#demo-bw") {

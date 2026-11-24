@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Navigate, Link, useLocation } from "react-router-dom";
+import { Navigate, Link, useLocation, useNavigate } from "react-router-dom";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -34,6 +34,7 @@ function friendlyError(err) {
 export default function LoginPage() {
   const { user, loading } = useAuth();
   const location = useLocation();
+  const navigate = useNavigate();
   const [mode, setMode] = useState("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -65,7 +66,9 @@ export default function LoginPage() {
       } else {
         await signInWithEmailAndPassword(auth, email.trim(), password);
       }
-      window.location.assign(from);
+      // Hash routing: navigate inside the SPA instead of a full page load,
+      // so the deployed site never hits a 404 on a hard refresh.
+      navigate(from, { replace: true });
     } catch (err) {
       setError(
         err && err.code === "auth/mismatch"

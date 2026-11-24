@@ -20,7 +20,9 @@ export function AuthProvider({ children }) {
     try {
       await signOut(auth);
     } finally {
-      window.location.assign("/login");
+      // Hash routing: change the route without a full page load so the
+      // deployed site never hits a 404 on a hard refresh.
+      window.location.hash = "#/login";
     }
   };
 
