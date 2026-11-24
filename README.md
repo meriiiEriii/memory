@@ -7,7 +7,7 @@
 A React single-page app that repairs damaged photographs on the user's own device, with an
 optional cloud-AI upgrade for extreme damage.
 
-**Live site:** https://meriiiEriii.github.io/memory/
+**Live site:** https://meriiieriii.github.io/memory/
 
 *React 18 · React Router 6 · Firebase Auth · Vite 5 · Canvas image engine · Node API proxy*
 
@@ -135,10 +135,13 @@ Firebase email/password, integrated in React throughout:
 
 The live site is published with **GitHub Pages** by the workflow in
 `.github/workflows/deploy.yml`, which builds the app with a `/memory/` asset prefix, adds a
-`404.html` copy as an SPA fallback (so deep links like `/memory/login` still load the app), and
-deploys `react-app/dist`.
+`404.html` copy as an SPA fallback, and deploys `react-app/dist`.
 
-**Live site:** https://meriiiEriii.github.io/memory/
+The app routes with `HashRouter`, so every screen lives under the hash
+(`https://meriiieriii.github.io/memory/#/login`). This keeps the deployed site working on any
+refresh or deep link, because GitHub Pages does not rewrite unknown paths to `404.html`.
+
+**Live site:** https://meriiieriii.github.io/memory/
 
 Every push to `main` redeploys automatically.
 
@@ -147,10 +150,9 @@ Every push to `main` redeploys automatically.
 GitHub Pages hosts static files only, so two things behave differently there:
 
 1. **Cloud AI is disabled** — the `/api` routes need `server.js` running. Use it locally.
-2. **Firebase sign-in** requires the domain `meriiiEriii.github.io` in the Firebase console
-   under *Authentication → Settings → Authorized domains*. Add it there (takes a few seconds)
-   if you want live login on the Pages URL; until then the offline editing UI is still fully
-   usable in the deployed build.
+2. **Firebase sign-in** works on the Pages URL: `meriiieriii.github.io` is already listed under
+   *Authentication → Settings → Authorized domains* in the Firebase console. Email/password
+   sign-in was verified end to end from the live origin.
 
 ## Verification
 
